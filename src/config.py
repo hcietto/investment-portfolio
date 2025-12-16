@@ -1,13 +1,15 @@
 # src/config.py
 
-#Description: This module defines lists of stock tickers for Brazilian and US markets
+"""
+Description: This module defines lists of stock tickers for Brazilian and US markets.
 
-#Last update:
-    #Date: 12-16-2025
-    #Updated by: Cietto
-    #Changes made: Included US stock tickers
+Last update:
+    Date: 12-16-2025
+    Updated by: Cietto
+    Changes made:
+        - Included US stock tickers
+"""
 
-#Note: Brazilian stock tickers end with '.SA' to denote São Paulo Stock Exchange listings
 BRAZIL_TICKERS = [
     "PETR4.SA",
     "VALE3.SA",

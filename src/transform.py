@@ -1,45 +1,86 @@
 # src/transform.py
 
-#Description: This module transforms stock data for analysis
+"""
+Description: This module transforms stock data for analysis.
 
-#Last update:
-    #Date: 12-16-2025
-    #Updated by: Cietto
-    #Changes made: Inluded Graham Fair Price and Upside calculations.
+Last update:
+    Date: 12-16-2025
+    Updated by: Cietto
+    Changes made:
+        - Graham Fair Price calculation
+        - Upside calculation
+        - Data validation and logging
+"""
 
 import pandas as pd
 import numpy as np
+import logging
 
-def transform_prices(df):
-    # Removes '.SA' from Brazilian tickers and standardizes to uppercase
-    df["Stock"] = df["Stock"].str.upper()
-    df["Stock"] = df["Stock"].str.replace(".SA", "", regex=False)
+def transform_prices(df: pd.DataFrame) -> pd.DataFrame:
 
-    # Convert columns to numeric types and handle missing values (coerce errors)
+    logging.info("Starting data transformation")
+
+    df = df.copy()
+
+    # Standardize tickers
+    df["Stock"] = (
+        df["Stock"]
+        .str.upper()
+        .str.replace(".SA", "", regex=False)
+    )
+
+    # Convert numeric columns
     numeric_cols = [
-        "Price", "DailyChangePct", "Change5dPct",
-        "EPS", "Book Value", "P/E", "Price-to-Book", "DividendYield", "ROE"
+        "Price",
+        "DailyChangePct",
+        "Change5dPct",
+        "EPS",
+        "Book Value",
+        "P/E",
+        "Price-to-Book",
+        "DividendYield",
+        "ROE"
     ]
 
     for col in numeric_cols:
         df[col] = pd.to_numeric(df[col], errors="coerce")
 
-    # Graham Fair Price calculation
-    df["GrahamFairPrice"] = np.sqrt(22.5 * df["EPS"] * df["Book Value"])
+    
+    # Graham Fair Price
+    # Only valid when EPS > 0 and Book Value > 0
+    valid_graham = (df["EPS"] > 0) & (df["Book Value"] > 0)
 
-    df["UpsideGrahamPct"] = (df["GrahamFairPrice"] / df["Price"] - 1) * 100
+    df["GrahamFairPrice"] = np.where(
+        valid_graham,
+        np.sqrt(22.5 * df["EPS"] * df["Book Value"]),
+        np.nan
+    )
 
-    # Round numerical columns for better readability
-    df["Price"] = df["Price"].round(2)
-    df["DailyChangePct"] = df["DailyChangePct"].round(2)
-    df["Change5dPct"] = df["Change5dPct"].round(2)
-    df["EPS"] = df["EPS"].round(2)
-    df["Book Value"] = df["Book Value"].round(2)
-    df["P/E"] = df["P/E"].round(2)
-    df["Price-to-Book"] = df["Price-to-Book"].round(2)
-    df["DividendYield"] = (df["DividendYield"]).round(2)
-    df["ROE"] = (df["ROE"] * 100).round(2)
-    df["GrahamFairPrice"] = df["GrahamFairPrice"].round(2)
-    df["UpsideGrahamPct"] = df["UpsideGrahamPct"].round(2)
+    # Upside / Downside vs Graham
+    df["UpsideGrahamPct"] = np.where(
+        df["GrahamFairPrice"].notna(),
+        (df["GrahamFairPrice"] / df["Price"] - 1) * 100,
+        np.nan
+    )
+
+    # Rounding
+    round_cols = [
+        "Price",
+        "DailyChangePct",
+        "Change5dPct",
+        "EPS",
+        "Book Value",
+        "P/E",
+        "Price-to-Book",
+        "DividendYield",
+        "ROE",
+        "GrahamFairPrice",
+        "UpsideGrahamPct"
+    ]
+
+    for col in round_cols:
+        df[col] = df[col].round(2)
+
+    logging.info("Data transformation finished successfully")
 
     return df
