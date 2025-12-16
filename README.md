@@ -1,4 +1,4 @@
-Investment Portfolio Data Pipeline
+# Investment Portfolio Data Pipeline
 
 This project is a simple data engineering ETL pipeline designed to collect, transform, and load
 stock market data from Brazilian and U.S. markets into an Excel file.
@@ -8,18 +8,18 @@ using real-world financial data.
 
 --------------------------------------------------
 
-DATA SOURCE
+## DATA SOURCE
 - Yahoo Finance, accessed via the yfinance Python library.
 
 --------------------------------------------------
 
-PIPELINE OVERVIEW
+## PIPELINE OVERVIEW
 
 1. Extract
 - Fetches the latest closing price for each stock.
 - Collects fundamental indicators when available:
-  - EPS (LPA)
-  - Book Value (VPA)
+  - EPS
+  - Book Value
   - P/E Ratio
   - Price-to-Book
   - Dividend Yield
@@ -37,35 +37,16 @@ PIPELINE OVERVIEW
 
 --------------------------------------------------
 
-MARKETS COVERED
-- Brazilian stocks (B3)
-- U.S. stocks (NYSE / NASDAQ)
+## MARKETS COVERED
+- Brazilian stocks
+- U.S. stocks
 
 Note:
 Fundamental data coverage for Brazilian stocks may be incomplete due to limitations of the data source.
 
 --------------------------------------------------
 
-PROJECT STRUCTURE
-
-investment-portfolio/
-|
-|-- src/
-|   |-- __init__.py
-|   |-- main.py
-|   |-- config.py
-|   |-- extract.py
-|   |-- transform.py
-|   |-- load.py
-|
-|-- output/
-|   |-- portfolio.xlsx
-|
-|-- README.txt
-
---------------------------------------------------
-
-HOW TO RUN
+## HOW TO RUN
 
 From the project root directory, run:
 
@@ -77,7 +58,7 @@ output/portfolio.xlsx
 
 --------------------------------------------------
 
-REQUIREMENTS
+## REQUIREMENTS
 
 - Python 3.10 or higher
 - pandas
@@ -90,7 +71,7 @@ pip install pandas yfinance openpyxl
 
 --------------------------------------------------
 
-PURPOSE
+## PURPOSE
 
 This project was built to:
 - Showcase data engineering fundamentals
@@ -100,16 +81,6 @@ This project was built to:
 
 --------------------------------------------------
 
-POSSIBLE IMPROVEMENTS
-
-- Add historical time-series data
-- Convert U.S. stock prices to BRL using FX rates
-- Store data in a database such as PostgreSQL or DuckDB
-- Add automated tests
-- Containerize the pipeline using Docker
-
---------------------------------------------------
-
-DISCLAIMER
+## DISCLAIMER
 
 This project is for educational purposes only and should not be considered financial advice.
