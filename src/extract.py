@@ -39,6 +39,8 @@ def extract_prices_and_indicators(tickers: list[str]) -> pd.DataFrame:
             daily_change_pct = (last_close / prev_close - 1) * 100
             change_5d_pct = (last_close / close_5d_ago - 1) * 100
 
+            # Brazilian stocks usually dont report EPS in the same way as US stocks, so multiple fields are checked
+            # Note: these fields may have different values depending on the stock and its reporting standards
             eps = (
                 info.get("earningsPerShare")
                 or info.get("epsTrailingTwelveMonths")
@@ -48,9 +50,13 @@ def extract_prices_and_indicators(tickers: list[str]) -> pd.DataFrame:
             book_value = info.get("bookValue")
             pe_ratio = info.get("trailingPE")
             pb_ratio = info.get("priceToBook")
-
             dividend_yield = info.get("dividendYield")
             roe = info.get("returnOnEquity")
+
+            # Analyst estimates
+            target_price = info.get("targetMeanPrice")
+            recommendation = info.get("recommendationKey")
+            analyst_opinions = info.get("numberOfAnalystOpinions")
 
             data.append({
                 "Stock": ticker.replace(".SA", ""),
@@ -63,7 +69,10 @@ def extract_prices_and_indicators(tickers: list[str]) -> pd.DataFrame:
                 "P/E": round(pe_ratio, 2) if pe_ratio else None,
                 "Price-to-Book": round(pb_ratio, 2) if pb_ratio else None,
                 "DividendYield": round(dividend_yield, 2) if dividend_yield else None,
-                "ROE": round(roe * 100, 2) if roe else None
+                "ROE": round(roe * 100, 2) if roe else None,
+                "TargetPrice": round(target_price, 2) if target_price else None,
+                "Recommendation": recommendation,
+                "AnalystOpinions": analyst_opinions
             })
 
             logging.info(f"Successfully extracted {ticker}")

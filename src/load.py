@@ -47,7 +47,7 @@ def load_to_excel(df: pd.DataFrame, file_path: str):
     try:
         with pd.ExcelWriter(file_path, engine="openpyxl") as writer:
 
-            # MAIN TAB
+            # Main tab
             main_cols = [
                 "Stock",
                 "Market",
@@ -61,7 +61,7 @@ def load_to_excel(df: pd.DataFrame, file_path: str):
                 index=False
             )
 
-            # ANALYSIS TAB
+            # Analysis tab
             analysis_cols = [
                 "Stock",
                 "Price",
@@ -74,7 +74,10 @@ def load_to_excel(df: pd.DataFrame, file_path: str):
                 "DividendYield",
                 "ROE",
                 "GrahamFairPrice",
-                "UpsideGrahamPct"
+                "UpsideGrahamPct",
+                "TargetPrice",
+                "Recommendation",
+                "AnalystOpinions"
             ]
 
             df[analysis_cols].to_excel(
