@@ -7,9 +7,8 @@ Last update:
     Date: 12-16-2025
     Updated by: Cietto
     Changes made:
-        - Graham Fair Price calculation
-        - Upside calculation
-        - Data validation and logging
+        - Target price upside calculation
+        - Recommendation
 """
 
 import pandas as pd
@@ -42,6 +41,7 @@ def transform_prices(df: pd.DataFrame) -> pd.DataFrame:
         "ROE"
     ]
 
+    # Ensure numeric types and coerce errors to NaN
     for col in numeric_cols:
         df[col] = pd.to_numeric(df[col], errors="coerce")
 
@@ -63,6 +63,8 @@ def transform_prices(df: pd.DataFrame) -> pd.DataFrame:
         np.nan
     )
 
+    df["UpsideTargetPct"] = (df["TargetPrice"] / df["Price"] - 1) * 100
+
     # Rounding
     round_cols = [
         "Price",
@@ -75,7 +77,9 @@ def transform_prices(df: pd.DataFrame) -> pd.DataFrame:
         "DividendYield",
         "ROE",
         "GrahamFairPrice",
-        "UpsideGrahamPct"
+        "UpsideGrahamPct",
+        "TargetPrice",
+        "UpsideTargetPct"
     ]
 
     for col in round_cols:

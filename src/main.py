@@ -46,6 +46,8 @@ def run_pipeline():
 
         logging.info("ETL pipeline executed successfully")
 
+        print(clean_data)
+
     except Exception as e:
         logging.exception(f"Pipeline failed: {str(e)}")
         raise # Reraise the exception after logging

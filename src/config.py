@@ -11,18 +11,22 @@ Last update:
 """
 
 BRAZIL_TICKERS = [
-    "PETR4.SA",
-    "VALE3.SA",
+    "AXIA3.SA",
     "ITUB4.SA",
+    "EQTL3.SA",
+    "CPLE5.SA",
+    "SBSP3.SA",
+    "BBAS3.SA",
+    "SOJA3.SA",
+    "SAPR4.SA",
+    "CURY3.SA",
+    "WEGE3.SA",
     "BPAC11.SA",
-    "BBAS3.SA"
+    "CYRE3.SA"
 ]
 
 US_TICKERS = [
-    "AAPL",
-    "MSFT",
-    "GOOGL",
-    "AMZN"
+    "ROXO"
 ]
 
 ALL_TICKERS = BRAZIL_TICKERS + US_TICKERS
